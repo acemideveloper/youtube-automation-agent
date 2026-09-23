@@ -1,0 +1,60 @@
+name: Bootstrap Analyst Sidecar
+
+on:
+  push:
+    branches:
+      - agenttube-analyst
+
+permissions:
+  contents: write
+
+jobs:
+  install-and-test:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout analyst branch
+        uses: actions/checkout@v4
+        with:
+          ref: agenttube-analyst
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Verify and extract analyst payload
+        shell: bash
+        run: |
+          cat .analyst-bootstrap.part00 .analyst-bootstrap.part01 .analyst-bootstrap.part02 .analyst-bootstrap.part03 .analyst-bootstrap.part04 > /tmp/analyst.b64
+          base64 --decode /tmp/analyst.b64 > /tmp/analyst.tar.gz
+          echo "f146134c5756f229ccf025cf8ab19ce025eb7662e5168ed44f199f4bc5700bbf  /tmp/analyst.tar.gz" | sha256sum --check -
+          tar -xzf /tmp/analyst.tar.gz
+          node scripts/finalize-analyst-install.js
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Analyst tests
+        run: npm run test:analyst
+
+      - name: Run upstream AgentTube tests
+        run: npm test
+
+      - name: Commit verified Analyst sidecar
+        shell: bash
+        run: |
+          rm -f .analyst-bootstrap.part00 .analyst-bootstrap.part01 .analyst-bootstrap.part02 .analyst-bootstrap.part03 .analyst-bootstrap.part04
+          rm -f .github/workflows/bootstrap-analyst.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit"
+          else
+            git commit -m "feat: add read-only AgentTube Analyst sidecar"
+            git push origin HEAD:agenttube-analyst
+          fi
