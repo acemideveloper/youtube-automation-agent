@@ -4,9 +4,17 @@ on:
   push:
     branches:
       - agenttube-analyst
+    paths-ignore:
+      - '.github/workflows/*-canary.yml'
+      - '.github/workflows/security-refresh.yml'
   pull_request:
     branches:
       - master
+  workflow_dispatch:
+
+concurrency:
+  group: analyst-ci-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
