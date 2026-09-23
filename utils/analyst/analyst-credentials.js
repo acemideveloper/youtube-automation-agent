@@ -40,7 +40,7 @@ class AnalystCredentialManager {
 
   validate() {
     if (!this.credentials?.youtube?.client_id || !this.credentials?.youtube?.client_secret) {
-      const error = new Error('Google OAuth client credentials are missing. Run the normal AgentTube setup first so config/credentials.json contains the YouTube client ID and secret.');
+      const error = new Error('Google OAuth client credentials are missing. Run: npm run analyst:oauth-config');
       error.code = 'ANALYST_OAUTH_CLIENT_MISSING';
       throw error;
     }
