@@ -79,7 +79,7 @@ async function main() {
 
   fs.mkdirSync(path.dirname(credentialsPath), { recursive: true });
   fs.writeFileSync(credentialsPath, JSON.stringify(next, null, 2), { mode: 0o600 });
-  try { fs.chmodSync(credentialsPath, 0o600); } catch (_error) {}
+  try { fs.chmodSync(credentialsPath, 0o600); } catch (_error) {\n    // Some filesystems do not expose POSIX permissions.\n  }
 
   console.log(`\nSaved OAuth client configuration to ${credentialsPath}`);
   console.log('Next: npm run analyst:auth');
