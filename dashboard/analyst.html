@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AgentTube Analyst</title>
+  <link rel="stylesheet" href="/analyst.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">READ-ONLY CHANNEL INTELLIGENCE</p>
+      <h1>AgentTube Analyst</h1>
+      <p id="channel-subtitle" class="muted">Kanal verileri yükleniyor…</p>
+    </div>
+    <div class="actions">
+      <button id="api-key-button" class="button ghost">API Key</button>
+      <button id="sync-button" class="button">Kanalı senkronize et</button>
+      <button id="measure-button" class="button secondary">Ölçümleri güncelle</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="notice" class="notice hidden"></section>
+
+    <section class="stats" aria-label="Kanal özeti">
+      <article><span>Videolar</span><strong id="stat-videos">—</strong></article>
+      <article><span>Ölçülen</span><strong id="stat-measured">—</strong></article>
+      <article><span>Packaging fırsatı</span><strong id="stat-packaging">—</strong></article>
+      <article><span>Hook fırsatı</span><strong id="stat-hook">—</strong></article>
+      <article><span>Bekleyen öneri</span><strong id="stat-recs">—</strong></article>
+    </section>
+
+    <section class="grid two">
+      <article class="panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">ÖNCELİK</p><h2>Packaging fırsatları</h2></div>
+          <span class="badge">CTR + retention</span>
+        </div>
+        <div id="packaging-list" class="list"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">İÇERİK</p><h2>Hook / vaat uyumu</h2></div>
+          <span class="badge">Retention</span>
+        </div>
+        <div id="hook-list" class="list"></div>
+      </article>
+    </section>
+
+    <section class="grid two">
+      <article class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">ÖĞRENME</p><h2>Güçlü pattern'ler</h2></div></div>
+        <div id="strong-list" class="list"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">SİSTEM</p><h2>Güncellik ve güvenlik</h2></div></div>
+        <div id="system-card" class="system-card"></div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <div><p class="eyebrow">KANAL KATALOĞU</p><h2>Videolar</h2></div>
+        <input id="video-search" class="search" type="search" placeholder="Başlık ara…">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Video</th><th>Tür</th><th>Yayın</th><th>Views</th><th></th></tr></thead>
+          <tbody id="video-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading"><div><p class="eyebrow">DÖNGÜ</p><h2>Öneriler</h2></div></div>
+      <div id="recommendation-list" class="list"></div>
+    </section>
+  </main>
+
+  <dialog id="video-dialog">
+    <div class="dialog-head">
+      <div><p class="eyebrow">VIDEO ANALYSIS</p><h2 id="dialog-title">Video</h2></div>
+      <button id="dialog-close" class="icon-button" aria-label="Kapat">×</button>
+    </div>
+    <div id="dialog-body"></div>
+  </dialog>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script src="/analyst.js"></script>
+</body>
+</html>
