@@ -1,0 +1,44 @@
+name: Analyst CI
+
+on:
+  push:
+    branches:
+      - agenttube-analyst
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  analyst:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Check Analyst OAuth setup syntax
+        run: node --check scripts/analyst-oauth-config.js
+
+      - name: Run Analyst tests
+        run: npm run test:analyst
+
+      - name: Run upstream AgentTube tests
+        run: npm test
+
+      - name: Block critical runtime dependency vulnerabilities
+        run: npm audit --omit=dev --audit-level=critical
