@@ -1,0 +1,61 @@
+name: Refresh Nonbreaking Dependencies
+
+on:
+  push:
+    branches:
+      - agenttube-analyst
+    paths:
+      - .github/workflows/security-refresh.yml
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agenttube-analyst
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Apply only nonbreaking audit fixes
+        shell: bash
+        run: npm audit fix || true
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Analyst tests
+        run: npm run test:analyst
+
+      - name: Upstream tests
+        run: npm test
+
+      - name: Report remaining runtime audit
+        shell: bash
+        run: npm audit --omit=dev || true
+
+      - name: Commit safe lockfile refresh
+        shell: bash
+        run: |
+          rm -f .github/workflows/security-refresh.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json .github/workflows/security-refresh.yml
+          if git diff --cached --quiet; then
+            echo "No dependency changes to commit"
+          else
+            git commit -m "chore: apply nonbreaking dependency security updates"
+            git push origin HEAD:agenttube-analyst
+          fi
