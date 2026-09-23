@@ -13,7 +13,7 @@ Read-only YouTube channel intelligence that runs beside upstream AgentTube witho
 
 ## First run
 
-1. `npm install`
+1. `npm ci`
 2. Configure the Google OAuth Desktop client using upstream setup so `config/credentials.json` exists.
 3. `npm run analyst:auth`
 4. Set `GEMINI_API_KEY` in `.env` if AI title/thumbnail advice is desired.
