@@ -22,7 +22,9 @@ function resolveRedirect(credentials) {
         if (!url.port) url.port = '8765';
         return url;
       }
-    } catch (_error) {\n      // Ignore malformed or non-loopback redirect candidates.\n    }
+    } catch (_error) {
+      // Ignore malformed or non-loopback redirect candidates.
+    }
   }
   return new URL('http://127.0.0.1:8765/');
 }
@@ -70,7 +72,9 @@ async function main() {
 
   fs.mkdirSync(path.dirname(tokensPath), { recursive: true });
   fs.writeFileSync(tokensPath, JSON.stringify({ youtube: tokens }, null, 2), { mode: 0o600 });
-  try { fs.chmodSync(tokensPath, 0o600); } catch (_error) {\n    // Some filesystems do not expose POSIX permissions.\n  }
+  try { fs.chmodSync(tokensPath, 0o600); } catch (_error) {
+    // Some filesystems do not expose POSIX permissions.
+  }
   console.log(`\nSaved read-only analyst token to ${tokensPath}`);
 }
 
