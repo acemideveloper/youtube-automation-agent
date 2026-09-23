@@ -23,7 +23,8 @@
     "analyst:auth": "node scripts/analyst-auth.js",
     "analyst:preflight": "node scripts/preflight-analyst-env.js",
     "analyst:backup": "node scripts/backup-analyst-data.js",
-    "test:analyst": "node tests/analyst-mode.test.js && node tests/analyst-preflight.test.js && node tests/analyst-m1.test.js && node tests/analyst-m2.test.js && node tests/analyst-m3.test.js && node tests/analyst-m4.test.js && node tests/analyst-m6.test.js"
+    "test:analyst": "node tests/analyst-mode.test.js && node tests/analyst-preflight.test.js && node tests/analyst-m1.test.js && node tests/analyst-m2.test.js && node tests/analyst-m3.test.js && node tests/analyst-m4.test.js && node tests/analyst-m6.test.js",
+    "analyst:oauth-config": "node scripts/analyst-oauth-config.js"
   },
   "dependencies": {
     "@google-cloud/local-auth": "^3.0.0",
